@@ -33,6 +33,9 @@ export const createTray = (): Tray => {
   tray = new Tray(findIcon());
   tray.setToolTip('BabelVoice');
   tray.setContextMenu(buildMenu());
+  if (process.platform === 'win32') {
+    tray.on('click', () => createControlWindow().show());
+  }
   subscribeLocale(() => tray?.setContextMenu(buildMenu()));
   return tray;
 };

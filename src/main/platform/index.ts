@@ -2,7 +2,8 @@
  * Platform dispatcher. Imports the macOS or Windows implementation
  * based on `process.platform` and re-exports a uniform API.
  *
- * v1: macOS only. Windows variant is stubbed with TODO(v2-windows).
+ * v1 ships both. macOS uses CoreAudio + ScreenCaptureKit; Windows uses WASAPI
+ * loopback and a virtual audio cable.
  */
 import * as macos from './macos.js';
 import * as windows from './windows.js';
@@ -42,8 +43,8 @@ export interface PlatformAdapter {
   /**
    * Trigger whatever the platform uses to install the virtual loopback
    * device. macOS launches the bundled BabelVoice .pkg installer; Windows
-   * (TODO v2) opens the VB-Cable download page. Returns once the trigger
-   * fires — the renderer polls `getVirtualOutputStatus` afterwards.
+   * opens the VB-Cable download page. Returns once the trigger fires — the
+   * renderer polls `getVirtualOutputStatus` afterwards.
    */
   requestVirtualOutputInstall(): Promise<InstallVirtualOutputResult>;
 }

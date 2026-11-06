@@ -4,6 +4,7 @@
   "listenLoopback": "开启「播放对方的译音」需要先在首页「收听来源」中选择一个会议应用，否则播放出来的译音会被重新录入，形成回环。",
   "pkgNotFound": "找不到打包的 BabelVoice 驱动（路径：{{path}}）。",
   "windowsInstallTodo": "Windows 端将于 v2 提供",
+  "windowsCableOpenFailed": "无法打开 VB-Cable 下载页：{{message}}",
   "sameLanguagePair": "源语言和目标语言不能相同，请在首页重新选择语言。",
   "sessionsStopping": "正在停止当前的翻译会话，请稍后再试。",
   "sessionKind": {

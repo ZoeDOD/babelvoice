@@ -170,6 +170,11 @@ export interface PersistedConfig {
     gemini?: string;
     openai?: string;
   };
+  /**
+   * Set once on Windows so the macOS default Alt+Space (which opens the
+   * window menu) is rewritten to Ctrl+Shift+Space a single time.
+   */
+  windowsHotkeyMigrated?: boolean;
 }
 
 export const DEFAULT_PREFERENCES: UserPreferences = {

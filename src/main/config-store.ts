@@ -43,6 +43,17 @@ const migratePreferences = (): void => {
     next.hotkey = DEFAULT_PREFERENCES.hotkey;
     changed = true;
   }
+  // Alt+Space opens the window system menu on Windows, so it can't be the
+  // push-to-talk toggle. Rewrite the untouched default once.
+  if (
+    process.platform === 'win32' &&
+    stored.hotkey === 'Alt+Space' &&
+    !store.get('windowsHotkeyMigrated')
+  ) {
+    next.hotkey = 'Ctrl+Shift+Space';
+    store.set('windowsHotkeyMigrated', true);
+    changed = true;
+  }
   // Slice 4 of the DirectionSession refactor (ADR-0001) deleted the browser
   // microphone path; the mic preference now stores a CoreAudio UID rather
   // than a Chromium MediaDeviceInfo hash. Drop the legacy key so it can't

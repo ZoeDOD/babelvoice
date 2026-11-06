@@ -69,15 +69,31 @@ const controlWindowBackground = (): string => {
 export const createControlWindow = (): BrowserWindow => {
   if (windows.control && !windows.control.isDestroyed()) return windows.control;
 
+  const { workArea } = screen.getPrimaryDisplay();
+  const width = Math.min(1280, workArea.width);
+  const height = Math.min(820, workArea.height - 8);
   const win = new BrowserWindow({
-    width: 1280,
-    height: 820,
-    minWidth: 960,
-    minHeight: 640,
+    width,
+    height,
+    x: workArea.x + Math.floor((workArea.width - width) / 2),
+    y: workArea.y + Math.floor((workArea.height - height) / 2),
+    minWidth: Math.min(960, workArea.width),
+    minHeight: Math.min(640, workArea.height),
     title: 'BabelVoice',
     backgroundColor: controlWindowBackground(),
-    titleBarStyle: 'hiddenInset',
-    trafficLightPosition: { x: 18, y: 18 },
+    ...(process.platform === 'darwin'
+      ? {
+          titleBarStyle: 'hiddenInset' as const,
+          trafficLightPosition: { x: 18, y: 18 }
+        }
+      : {
+          titleBarStyle: 'hidden' as const,
+          titleBarOverlay: {
+            color: controlWindowBackground(),
+            symbolColor: controlWindowBackground() === '#1e1e1e' ? '#f5f5f7' : '#1e1e1e',
+            height: 36
+          }
+        }),
     webPreferences: {
       preload: preloadPath,
       contextIsolation: true,
@@ -89,12 +105,10 @@ export const createControlWindow = (): BrowserWindow => {
   if (isDev) win.webContents.openDevTools({ mode: 'detach' });
   reloadOnCrash(win, 'control');
 
-  // macOS keeps the app running when the window is closed, and sessions keep
-  // running with it. This renderer owns transcript stitching + persistence
-  // and the hotkey subscription, so destroying it silently stopped saving
-  // the meeting and left the hotkey dead. Hide instead; Dock/tray reopen it.
+  // Keep the process alive when the window is closed so a meeting and the
+  // global hotkey survive. Dock (macOS) or the tray icon brings it back.
   win.on('close', (e) => {
-    if (process.platform === 'darwin' && !quitting) {
+    if (!quitting && (process.platform === 'darwin' || process.platform === 'win32')) {
       e.preventDefault();
       win.hide();
     }

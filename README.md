@@ -7,7 +7,20 @@ macOS 上的 AI 实时会议同传。
 - **说话**：把你说的话实时翻译成对方的语言，通过 BabelVoice 虚拟音频设备送进会议软件，对方直接听到译音。
 - **收听**：把会议里其他人说的话实时翻译成字幕，也可以播放译音给你听。
 
-翻译引擎可选豆包同声传译、通义千问（Qwen）、Gemini、OpenAI，用你自己的 API Key，开箱即用，不需要注册账号。Key 用系统钥匙串加密保存在本机，会议记录也只存在本地。
+翻译引擎可选豆包同声传译、通义千问（Qwen）、Gemini、OpenAI，用你自己的 API Key，开箱即用，不需要注册账号。Key 用系统钥匙串（macOS）或 DPAPI（Windows）加密保存在本机，会议记录也只存在本地。
+
+## Windows
+
+在 Windows 10 / 11 上从源码运行：
+
+```bash
+npm install
+npm run dev
+```
+
+需要 Visual Studio 2022 的 C++ 桌面开发工作负载，用来编译 WASAPI 音频模块。说话方向的译音要经过免费的 [VB-Audio Virtual Cable](https://vb-audio.com/Cable/)：BabelVoice 写入 **CABLE Input**，会议软件的麦克风选 **CABLE Output**。收听方向直接采集系统正在播放的声音，不需要虚拟声卡。图文步骤见 [`docs/SETUP-windows.md`](docs/SETUP-windows.md)。
+
+默认快捷键是 **Ctrl+Shift+Space**。关闭主窗口后应用留在托盘里，右键托盘图标可以退出。
 
 ## 下载安装
 

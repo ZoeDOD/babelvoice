@@ -13,6 +13,7 @@ import {
   type Locale
 } from '@shared/i18n-types.js';
 import { resources } from '@shared/locales/index.js';
+import { applyWindowsCopy } from '@shared/locales/windows-copy.js';
 
 let initPromise: Promise<void> | null = null;
 
@@ -26,7 +27,10 @@ const syncDocumentLang = (lng: string): void => {
 export const initRendererI18n = async (
   initialLocale: Locale = DEFAULT_LOCALE
 ): Promise<void> => {
-  if (!initPromise) {
+    if (!initPromise) {
+    if (typeof navigator !== 'undefined' && /Windows/i.test(navigator.userAgent)) {
+      applyWindowsCopy(resources);
+    }
     i18n.on('languageChanged', syncDocumentLang);
     initPromise = i18n
       .use(initReactI18next)

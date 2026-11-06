@@ -9,6 +9,7 @@ import {
   type Namespace
 } from '@shared/i18n-types.js';
 import { resources } from '@shared/locales/index.js';
+import { applyWindowsCopy } from '@shared/locales/windows-copy.js';
 
 /**
  * Main-side i18n is the source of truth for the user's locale choice.
@@ -57,6 +58,7 @@ const detectSystemLocale = (): Locale => {
 };
 
 export const initI18n = (): Locale => {
+  if (process.platform === 'win32') applyWindowsCopy(resources);
   const override = readOverride();
   currentLocale = override ?? detectSystemLocale();
   log.info(

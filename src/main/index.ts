@@ -44,6 +44,9 @@ setLogSink({
 });
 
 app.setName('BabelVoice');
+if (process.platform === 'win32') {
+  app.setAppUserModelId('com.ljhao.babelvoice');
+}
 
 // Take the single-instance lock before anything touches shared state. A
 // second instance used to run recoverCrashedMeetings() first — stamping the

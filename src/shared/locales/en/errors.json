@@ -4,6 +4,7 @@
   "listenLoopback": "“Play their translation” needs an app selected under “Listen to” on the home screen. Otherwise the played translation would be captured again and loop.",
   "pkgNotFound": "BabelVoice driver package not found (path: {{path}}).",
   "windowsInstallTodo": "Windows setup arrives in v2",
+  "windowsCableOpenFailed": "Couldn't open the VB-Cable download page: {{message}}",
   "sameLanguagePair": "Source and target language must differ. Pick the languages again on the home screen.",
   "sessionsStopping": "Translation sessions are stopping. Try again in a moment.",
   "sessionKind": {

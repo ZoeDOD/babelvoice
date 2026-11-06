@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { join } from 'node:path';
 
 const electron = vi.hoisted(() => ({
   app: { isPackaged: false, getAppPath: vi.fn(() => '/repo') },
@@ -28,7 +29,7 @@ afterEach(() => {
 
 describe('resolveSetupGuidePath', () => {
   it('reads the guide from the repo in dev', () => {
-    expect(resolveSetupGuidePath()).toBe('/repo/docs/SETUP-macOS.md');
+    expect(resolveSetupGuidePath()).toBe(join('/repo', 'docs', 'SETUP-macOS.md'));
   });
 
   it('reads the bundled copy from Resources when packaged', () => {
@@ -38,7 +39,7 @@ describe('resolveSetupGuidePath', () => {
       configurable: true
     });
     expect(resolveSetupGuidePath()).toBe(
-      '/Applications/BabelVoice.app/Contents/Resources/docs/SETUP-macOS.md'
+      join('/Applications/BabelVoice.app/Contents/Resources', 'docs', 'SETUP-macOS.md')
     );
   });
 });
@@ -46,7 +47,7 @@ describe('resolveSetupGuidePath', () => {
 describe('openSetupGuide', () => {
   it('opens the guide with the default app', async () => {
     await openSetupGuide();
-    expect(electron.shell.openPath).toHaveBeenCalledWith('/repo/docs/SETUP-macOS.md');
+    expect(electron.shell.openPath).toHaveBeenCalledWith(join('/repo', 'docs', 'SETUP-macOS.md'));
     expect(electron.shell.showItemInFolder).not.toHaveBeenCalled();
   });
 
@@ -54,7 +55,7 @@ describe('openSetupGuide', () => {
     electron.shell.openPath.mockResolvedValueOnce('No application knows how to open');
     await openSetupGuide();
     expect(electron.shell.showItemInFolder).toHaveBeenCalledWith(
-      '/repo/docs/SETUP-macOS.md'
+      join('/repo', 'docs', 'SETUP-macOS.md')
     );
   });
 });

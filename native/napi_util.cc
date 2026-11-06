@@ -1,7 +1,10 @@
 #include "napi_util.h"
 
+#if !defined(_WIN32)
 #include <time.h>
+#endif
 
+#include <chrono>
 #include <cstdio>
 
 namespace babelvoice {
@@ -79,9 +82,14 @@ bool TtsSampleRateArg(napi_env env, const napi_value *args, size_t argc, size_t 
 }
 
 uint64_t NowMs() {
+#if defined(_WIN32)
+  using namespace std::chrono;
+  return static_cast<uint64_t>(duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count());
+#else
   struct timespec ts;
   clock_gettime(CLOCK_REALTIME, &ts);
   return static_cast<uint64_t>(ts.tv_sec) * 1000u + static_cast<uint64_t>(ts.tv_nsec / 1000000);
+#endif
 }
 
 void CopyCString(char *dst, size_t dstLen, const char *src) {

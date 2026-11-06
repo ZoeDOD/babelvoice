@@ -8,7 +8,9 @@ import path from 'node:path';
 
 const VARIANT = /_(FEMININE|MASCULINE|NEUTER)$/;
 
-export default function afterPack({ appOutDir, packager }) {
+export default function afterPack(context) {
+  if (context.electronPlatformName !== 'darwin') return;
+  const { appOutDir, packager } = context;
   const wanted = [packager.platformSpecificBuildOptions.electronLanguages ?? packager.config.electronLanguages ?? []].flat();
   if (wanted.length === 0) return;
   const resources = path.join(
